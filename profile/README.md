@@ -14,6 +14,6 @@ If you would like to build a new extractor for your specific usecase, you can us
 ### Retrieval and Ingestion Client API 
 Python API to interact with the Indexify server API to upload content and retreive and search indexes is available for Python and TypeScript.
 
-Code - https://github.com/tensorlakeai/indexify/tree/main/sdk-py 
-PyPi Package - `indexfiy`
-NPM Package - `getindexify`
+* Code - https://github.com/tensorlakeai/indexify/tree/main/sdk-py 
+* PyPi Package - `indexfiy`
+* NPM Package - `getindexify`
