@@ -12,7 +12,8 @@ Extractors are Python classes which extracts embedding or JSON metadata from uns
 If you would like to build a new extractor for your specific usecase, you can use the Extractor SDK here which has the tools to build, test and package extractors that can be used with Indexify. The SDK is available on PyPI with the name indexify-extractor-sdk
 
 ### Retrieval and Ingestion Client API 
-Python API to interact with the Indexify server API to upload content and retreive and search indexes is available for Python and TypeScript
+Python API to interact with the Indexify server API to upload content and retreive and search indexes is available for Python and TypeScript.
+
 Code - https://github.com/tensorlakeai/indexify/tree/main/sdk-py 
 PyPi Package - `indexfiy`
 NPM Package - `getindexify`
