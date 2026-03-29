@@ -1,0 +1,66 @@
+name: Reusable — Rust Checks
+
+# Runs cargo fmt, clippy, and nextest.
+# Usage in your repo's workflow:
+#
+#   jobs:
+#     rust-checks:
+#       uses: tensorlakeai/.github/.github/workflows/reusable-rust-checks.yml@main
+#       with:
+#         working-directory: "."
+#       secrets: inherit
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "Directory containing Cargo.toml"
+        required: false
+        type: string
+        default: "."
+      run-tests:
+        description: "Whether to run nextest"
+        required: false
+        type: boolean
+        default: true
+      toolchain:
+        description: "Rust toolchain (stable, nightly, or specific version)"
+        required: false
+        type: string
+        default: "stable"
+
+jobs:
+  rust-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ inputs.toolchain }}
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ inputs.working-directory }}
+
+      - name: cargo fmt
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Install nextest
+        if: inputs.run-tests
+        uses: taiki-e/install-action@nextest
+
+      - name: cargo nextest
+        if: inputs.run-tests
+        run: cargo nextest run --all-features

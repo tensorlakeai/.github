@@ -1,0 +1,58 @@
+name: Reusable — ADR Broadcast
+
+# Called by any tensorlakeai repo that has ADRs.
+# Usage in your repo's workflow:
+#
+#   jobs:
+#     adr-broadcast:
+#       uses: tensorlakeai/.github/.github/workflows/reusable-adr-broadcast.yml@main
+#       with:
+#         adr_file_path: ${{ steps.detect.outputs.path }}
+#         engineering_repo: tensorlakeai/engineering
+#       secrets: inherit
+
+on:
+  workflow_call:
+    inputs:
+      adr_file_path:
+        description: "Relative path to the merged ADR file"
+        required: true
+        type: string
+      slack_channel:
+        description: "Slack channel for the notification"
+        required: false
+        type: string
+        default: "#architecture-updates"
+      engineering_repo:
+        description: "The engineering repo containing broadcast.mjs"
+        required: false
+        type: string
+        default: "tensorlakeai/engineering"
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: false
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout calling repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Fetch broadcast script from engineering repo
+        run: |
+          curl -fsSL \
+            "https://raw.githubusercontent.com/${{ inputs.engineering_repo }}/main/scripts/broadcast.mjs" \
+            -o broadcast.mjs
+
+      - name: Broadcast ADR notification
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ARCHITECTURE: ${{ inputs.slack_channel }}
+          ADR_FILE_PATH: ${{ inputs.adr_file_path }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: node broadcast.mjs

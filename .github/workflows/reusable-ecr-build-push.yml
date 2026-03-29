@@ -1,0 +1,78 @@
+name: Reusable — ECR Build and Push
+
+# Builds a Docker image and pushes to ECR using OIDC authentication.
+# Usage in your repo's workflow:
+#
+#   jobs:
+#     build-push:
+#       uses: tensorlakeai/.github/.github/workflows/reusable-ecr-build-push.yml@main
+#       with:
+#         ecr-repository: my-service
+#         image-tag: ${{ github.sha }}
+#         aws-region: us-east-1
+#       secrets: inherit
+
+on:
+  workflow_call:
+    inputs:
+      ecr-repository:
+        description: "ECR repository name (without the registry URL)"
+        required: true
+        type: string
+      image-tag:
+        description: "Docker image tag"
+        required: false
+        type: string
+        default: ${{ github.sha }}
+      dockerfile:
+        description: "Path to Dockerfile"
+        required: false
+        type: string
+        default: "Dockerfile"
+      context:
+        description: "Docker build context"
+        required: false
+        type: string
+        default: "."
+      aws-region:
+        description: "AWS region"
+        required: false
+        type: string
+        default: "us-east-1"
+      aws-account-id:
+        description: "AWS account ID"
+        required: false
+        type: string
+        default: "347620126581"
+    secrets:
+      AWS_ROLE_ARN:
+        required: false
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.context }}
+          file: ${{ inputs.dockerfile }}
+          push: true
+          tags: |
+            ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ inputs.image-tag }}
+            ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:latest
