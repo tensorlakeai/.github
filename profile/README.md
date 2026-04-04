@@ -47,7 +47,7 @@ snapshot = client.snapshot_and_wait(sandbox.sandbox_id)
 
 | Repository | Description |
 |---|---|
-| [tensorlake/sdk](https://github.com/tensorlake) | CLI and Python SDK |
+| [tensorlake/sdk](https://github.com/tensorlakeai/tensorlake) | CLI and Python SDK |
 | [tensorlake/cookbooks](https://github.com/tensorlakeai/cookbooks) | Example projects and integrations |
 | [tensorlake/skills](https://github.com/tensorlakeai/tensorlake-skills) | Skills for coding agents to use Tensorlake |
 
