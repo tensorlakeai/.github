@@ -5,7 +5,7 @@
 ### Agent-native compute infrastructure.
 ### Secure sandboxes that scale from one to thousands.
 
-[Documentation](https://tensorlake.ai/docs) · [Book a Demo](https://calendly.com/diptanu-tensorlake/30min) · [Slack](https://tensorlakecloud.slack.com/)
+[Documentation](https://docs.tensorlake.ai/) · [Book a Demo](https://calendly.com/diptanu-tensorlake/30min) · [Slack](https://tensorlakecloud.slack.com/)
 
 </div>
 
