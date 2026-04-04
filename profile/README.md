@@ -50,6 +50,7 @@ snapshot = client.snapshot_and_wait(sandbox.sandbox_id)
 | [tensorlake/sdk](https://github.com/tensorlakeai/tensorlake) | CLI and Python SDK |
 | [tensorlake/cookbooks](https://github.com/tensorlakeai/cookbooks) | Example projects and integrations |
 | [tensorlake/skills](https://github.com/tensorlakeai/tensorlake-skills) | Skills for coding agents to use Tensorlake |
+| [benchmarks](https://github.com/tensorlakeai/sandbox-sqlite-bench) | Sandbox File System I/O Benchmarks |
 
 ## Get in Touch
 
