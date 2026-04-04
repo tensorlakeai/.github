@@ -11,23 +11,27 @@
 
 ---
 
-Tensorlake provides dynamic, persistent sandboxes for AI agents. Run untrusted code securely, fan out parallel execution across clusters, and suspend/resume agents from cold storage — from the CLI or the Python SDK.
+Tensorlake provides dynamic, persistent sandboxes for AI agents. Run untrusted code securely, fan out parallel execution across clusters, and checkpoint agents to resume them on demand — from the CLI or the Python SDK.
 
 ```bash
 pip install tensorlake
-tensorlake sandbox create --name my-sandbox
-tensorlake sandbox exec my-sandbox "echo 'Hello from Tensorlake'"
+tl login
+tl sbx new my-sandbox --cpus 1.0 --memory 1024
+tl sbx exec <sandbox-id> python -c 'print("Hello from Tensorlake")'
+tl sbx snapshot <sandbox-id>
 ```
 
 ```python
-from tensorlake import Sandbox
+from tensorlake.sandbox import SandboxClient
 
-sandbox = Sandbox.create()
-result = sandbox.exec("echo 'Hello from Tensorlake'")
+client = SandboxClient()
+sandbox = client.create_and_connect(name="my-sandbox", cpus=1.0, memory_mb=1024)
 
-# Suspend to cold storage, resume later
-snapshot = sandbox.suspend()
-sandbox = Sandbox.resume(snapshot)
+result = sandbox.run("python", ["-c", "print('Hello from Tensorlake')"])
+print(result.stdout)
+
+# Checkpoint and snapshot
+snapshot = client.snapshot_and_wait(sandbox.sandbox_id)
 ```
 
 ## Why Tensorlake
@@ -49,7 +53,7 @@ sandbox = Sandbox.resume(snapshot)
 
 ## Get in Touch
 
-- [Documentation](https://tensorlake.ai/docs)
+- [Documentation](https://docs.tensorlake.ai/)
 - [Blogs](https://www.tensorlake.ai/blog)
 - [Book a Demo](https://calendly.com/diptanu-tensorlake/30min)
 - [Slack](https://tensorlakecloud.slack.com/)
