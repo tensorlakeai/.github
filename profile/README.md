@@ -16,22 +16,21 @@ Tensorlake provides dynamic, persistent sandboxes for AI agents. Run untrusted c
 ```bash
 pip install tensorlake
 tl login
-tl sbx new my-sandbox --cpus 1.0 --memory 1024
+tl sbx create my-sandbox --cpus 1.0 --memory 1024
 tl sbx exec <sandbox-id> python -c 'print("Hello from Tensorlake")'
-tl sbx snapshot <sandbox-id>
+tl sbx checkpoint <sandbox-id>
 ```
 
 ```python
-from tensorlake.sandbox import SandboxClient
+from tensorlake.sandbox import Sandbox
 
-client = SandboxClient()
-sandbox = client.create_and_connect(name="my-sandbox", cpus=1.0, memory_mb=1024)
+sandbox = Sandbox.create(name="my-sandbox", cpus=1.0, memory_mb=1024)
 
 result = sandbox.run("python", ["-c", "print('Hello from Tensorlake')"])
 print(result.stdout)
 
 # Checkpoint and snapshot
-snapshot = client.snapshot_and_wait(sandbox.sandbox_id)
+snapshot = sandbox.checkpoint(sandbox.sandbox_id)
 ```
 
 ## Why Tensorlake
