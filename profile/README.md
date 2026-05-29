@@ -57,6 +57,7 @@ snapshot = sandbox.checkpoint(sandbox.sandbox_id)
 - [Blogs](https://www.tensorlake.ai/blog)
 - [Book a Demo](https://calendly.com/diptanu-tensorlake/30min)
 - [Slack](https://tensorlakecloud.slack.com/)
+- [Newsletter](https://tensorlake.beehiiv.com/)
 
 <div align="center">
 
